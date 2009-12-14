@@ -1,4 +1,5 @@
 set :branch, 'master'
+set :repository, ''
 set :scm, :git
 set :git_enable_submodules, 1
 ssh_options[:paranoid] = false
@@ -8,22 +9,24 @@ set :keep_releases, 2
 
 after 'deploy:restart', 'deploy:cleanup'
 
-#load the moonshine configuration into
 require 'yaml'
-begin
-  hash = YAML.load_file(File.join((ENV['RAILS_ROOT'] || Dir.pwd), 'config', 'moonshine.yml'))
-  hash.each do |key, value|
-    set(key.to_sym, value)
-  end
-rescue Exception
-  puts "To use Capistrano with Moonshine, please run 'ruby script/generate moonshine',"
-  puts "edit config/moonshine.yml, then re-run capistrano."
-  exit(1)
-end
+require "#{File.dirname(__FILE__)}/multisite.rb"
+set_stages
+after "multistage:ensure", "moonshine:load_moonshine_multisite_config"
 
 set :scm, :svn if !! repository =~ /^svn/
 
 namespace :moonshine do
+
+  desc <<-DESC
+  Loads the moonshine_multisite config and, based on the stage, applies the
+  variables with cap's "set" method.  Also sets the server name and roles.
+  See also Moonshine::Multisite.apply_moonshine_multisite_config_from_cap
+  DESC
+  task :load_moonshine_multisite_config do
+    apply_moonshine_multisite_config_from_cap
+    server fetch(:server), :web, :app, :db
+  end
 
   desc <<-DESC
   Bootstrap a barebones Ubuntu system with Git, Ruby, RubyGems, and Moonshine

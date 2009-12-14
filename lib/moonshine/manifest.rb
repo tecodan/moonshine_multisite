@@ -2,10 +2,10 @@
 # for loading moonshine recpies from plugins, a template helper, and parses
 # several configuration files:
 #
-#   config/moonshine.yml
+#   vendor/plugins/moonshine_multisite/moonshine_multisite.yml
 #
-# The contents of <tt>config/moonshine.yml</tt> are expected to serialize into
-# a hash, and are loaded into the manifest's Configatron::Store.
+# See <tt>recipes/multisite.rb</tt> for how the moonshine_multisite.yml is
+# loaded in to Configatron::Store.
 #
 #   config/database.yml
 #
