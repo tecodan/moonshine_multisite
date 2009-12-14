@@ -10,7 +10,8 @@
 #   config/database.yml
 #
 # The contents of your database config are parsed and are available at
-# <tt>configuration[:database]</tt>.
+# <tt>configuration[:database]</tt>.  The database file can be changed with
+# Rails::Configuration.database_configuration_file.
 #
 # If you'd like to create another 'default rails stack' using other tools that
 # what Moonshine::Manifest::Rails uses, subclass this and go nuts.
@@ -143,7 +144,12 @@ class Moonshine::Manifest < ShadowPuppet::Manifest
   end
 
   # database config
-  configure(:database => YAML::load(ERB.new(IO.read(File.join(rails_root, 'config', 'database.yml'))).result))
+  if defined?(Rails)
+    db_config = Rails::configuration.database_configuration_file.to_s
+  else
+    db_config = File.join(rails_root, 'config', 'database.yml')
+  end
+  configure(:database => YAML::load(ERB.new(IO.read(db_config))).result)
 
   # gems
   configure(:gems => (YAML.load_file(File.join(rails_root, 'config', 'gems.yml')) rescue nil))
