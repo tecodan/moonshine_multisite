@@ -1,3 +1,6 @@
+require 'yaml'
+require 'erb'
+
 def utopian_db_name(server, app, stage)
   "#{server || 'server'}.#{app || 'app'}.#{stage || 'stage'}"
 end
@@ -24,20 +27,27 @@ def multisite_config_hash
 end
 
 # Sets the key and values in capistrano from the moonshine multisite config
+# Also sets @moonshine_config as a hash of moonshine values (similar to what
+# would be gotten from a moonshine.yml)
 def apply_moonshine_multisite_config(server, stage)
-  multisite_config_hash[:servers][server.to_sym].each do |key, value|
+  domain = multisite_config_hash[:servers][server.to_sym][:domain]
+  # give some nice defaults
+  @moonshine_config = {
+    :server_only => server,
+    :stage_only => stage,
+    :repository => multisite_config_hash[:apps][fetch(:application)],
+    :scm => if (!! repository =~ /^svn/) then :svn else :git end,
+    :branch => "#{server}.#{stage}"
+  }
+  @moonshine_config.merge! multisite_config_hash[:servers][server.to_sym]
+  # tie the multisite_config_hash back to the instance variabled one
+  multisite_config_hash[:servers][server.to_sym] = @moonshine_config
+  @moonshine_config.each do |key, value|
     set(key.to_sym, value)
   end
-  set :server_only, server
-  set :stage_only, stage
-  set :repository, multisite_config_hash[:apps][fetch(:application)]
-  set :scm, :svn if !! repository =~ /^svn/
-  # Currently there's no way to override the following settings, they're just
-  # inherent in moonshine multisite.
-  # If someone uses this and wants to override this, we can make a way to 
-  # override them in the moonshine_multisite.yml.
-  set :deploy_to, "/var/www/#{fetch(:application)}.#{stage}.#{fetch(:domain)}"
-  set :branch, "#{server}.#{stage}"
+  deploy_to = "/var/www/#{fetch(:application)}.#{stage}.#{fetch(:domain)}"
+  set :deploy_to, deploy_to
+  @moonshine_config[:deploy_to] = deploy_to
 end
 
 # Assumes that your capistrano-ext stages are actually in "host/stage", then
