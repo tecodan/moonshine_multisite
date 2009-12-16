@@ -10,7 +10,7 @@ set :keep_releases, 2
 after 'deploy:restart', 'deploy:cleanup'
 
 require 'yaml'
-require "#{File.dirname(__FILE__)}/multisite_helpers.rb"
+require "#{File.dirname(__FILE__)}/../lib/multisite_helper.rb"
 set_stages
 after "multistage:ensure", "moonshine:load_moonshine_multisite_config"
 

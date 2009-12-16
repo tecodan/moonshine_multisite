@@ -1,40 +1,26 @@
-def multisite_config_hash
-  return @multisite_config if @multisite_config
-  file = "#{File.dirname(__FILE__)}/../moonshine_multisite.yml"
-  return {} unless File.exists?(file)
-  @multisite_config = YAML.load_file(file)
-end
+namespace :moonshine do
+  namespace :multisite do
+    namespace :secure do
+      desc "Downloads the moonshine secure folder to app/manifests/assets/private"
+      task :download do
+        set :user, fetch(:private_user)
+        server fetch(:private_host), :private
+        FileUtils.mkdir_p "app/manifests/assets/"
+        parent.download fetch(:private_path), "app/manifests/assets/private",
+          :recursive => true,
+          :hosts => fetch(:private_host)
+      end
 
-# Sets the key and values in capistrano from the moonshine multisite config
-def apply_moonshine_multisite_config(host, stage)
-  multisite_config_hash[:servers][host.to_sym].each do |key, value|
-    set(key.to_sym, value)
+      desc "Replaces the moonshine secure folder with app/manifests/assets/private"
+      task :upload do
+        set :user, fetch(:private_user)
+        run "rm -rf #{fetch(:private_path)}.backup*", :hosts => fetch(:private_host)
+        run "mv #{fetch(:private_path)} #{fetch(:private_path)}.backup", 
+          :hosts => fetch(:private_host)
+        parent.upload "app/manifests/assets/private", fetch(:private_path), 
+          :recursive => true,
+          :hosts => fetch(:private_host)
+      end
+    end
   end
-  set :repository, multisite_config_hash[:apps][fetch(:application)]
-  set :scm, :svn if !! repository =~ /^svn/
-  # Currently there's no way to override the following settings, they're just
-  # inherent in moonshine multisite.
-  # If someone uses this and wants to override this, we can make a way to 
-  # override them in the moonshine_multisite.yml.
-  set :deploy_to, "/var/www/#{fetch(:application)}.#{stage}.#{fetch(:domain)}"
-  set :branch, "#{host}.#{stage}"
-end
-
-# Assumes that your capistrano-ext stages are actually in "host/stage", then
-# extracts the host and stage and goes to apply_moonshine_multisite_config
-def apply_moonshine_multisite_config_from_cap
-  fetch(:stage).to_s =~ /(.*)\/(.*)/
-  apply_moonshine_multisite_config $1, $2
-end
-
-def get_stages
-  multisite_config_hash[:servers].keys.collect { |host|
-    multisite_config_hash[:stages].collect{ |stage|
-      "#{host}/#{stage}"
-    }
-  }.flatten
-end
-
-def set_stages
-  set :stages, get_stages
 end

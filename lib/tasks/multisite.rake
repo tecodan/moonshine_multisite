@@ -1,5 +1,5 @@
 require "yaml"
-require "#{File.dirname(__FILE__)}/../../recipes/multisite_helpers.rb"
+require "#{File.dirname(__FILE__)}/../../lib/multisite_helper.rb"
 
 namespace :moonshine do
   namespace :multisite do

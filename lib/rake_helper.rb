@@ -1,8 +1,16 @@
 def root_config
   return @root_config if @root_config
-  file = File.join(File.dirname(__FILE__), '..', 'config', 'database_root.yml')
-  if File.exists?(file)
-    @root_config = YAML::load(File.open(file))
+  file_plugin = File.join(File.dirname(__FILE__), '..', 'config', 'database_root.yml')
+  #file_root = File.join(File.dirname(__FILE__), '/../../../../', 'config', 'database_root.yml')
+  file_root = File.join(Rails.root.join('config', 'database_root.yml'))
+  if File.exists?(file_plugin)
+    file_found = file_plugin
+  elsif File.exists?(file_root)
+    file_found = file_root
+  end
+
+  if file_found
+    @root_config = {'database' => nil}.merge(YAML::load(File.open(file_found)))
   else
     throw %|
 Aborting. Need a config/database_root.yml file with contents as arguments for
@@ -31,13 +39,16 @@ end
 #
 # :prod => <name of production database>
 # :dev => <name of development database to copy prod to> OR 
-#         <file boolean, which dumps to tmp/#{prod}>
+#         :file boolean, which dumps to tmp/:prod>
 ## production will be clone to development
 # 
 def clone(params)
   prod = params[:prod]
   dev = params[:dev]
   file = params[:file]
+  dbserver = root_config[:host]
+  dbuser = root_config[:username]
+  dbpass = root_config[:password]
 
   throw "need a :prod database" unless prod.present?
   throw "need a :dev database" unless dev.present? || file.present?
@@ -48,28 +59,40 @@ def clone(params)
   if file
     dest = "| gzip > #{Rails.root.join("tmp/#{prod}.sql.gz")}"
   else
-    dest = "| mysql -h web-db.powertochange.local -u ciministry --password=#{@password} #{dev}"
+    dest = "| mysql -h #{dbserver} -u #{dbuser} --password=#{dbpass} #{dev}"
+    unless @databases && @databases.include?(dev)
+      ActiveRecord::Base.connection.create_database(dev)
+    end
   end
-  execute_shell "mysqldump #{options} -h web-db.powertochange.local -u ciministry --password=#{@password} #{prod} | sed \"2 s/.*/SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO';/\" #{dest}"
+  execute_shell "mysqldump #{options} -h #{dbserver} -u #{dbuser} --password=#{dbpass} #{prod} | sed \"2 s/.*/SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO';/\" #{dest}"
 end
 
-def execute_sql(command)
+def prepare_for_sql
   unless defined?(ActiveRecord)
     require "active_record"
-    load_config
-    ActiveRecord::Base.establish_connection root_config
+    root_config
+    ActiveRecord::Base.establish_connection root_config.merge('database' => '')
   end
 
   # grab a connection if there's not one already
   unless @sql
     @sql = ActiveRecord::Base.connection
   end
+end
+
+def execute_sql(command)
+  prepare_for_sql
 
   for c in command.split(';')
     puts "[SQL] #{c.lstrip.rstrip}"
     STDIN.gets
     @sql.execute c
   end
+end
+
+def select_rows(command)
+  prepare_for_sql
+  ActiveRecord::Base.connection.select_rows(command)
 end
 
 def execute_shell(command)
@@ -100,62 +123,9 @@ def for_dbs(action)
   end
 end
 
-# ========
-
-def utopian_db_name(server, app, stage)
-  "#{server}.#{app}.#{stage}"
-end
-
-def legacy_db_name(server, app, stage)
-  hash_path = [ :servers, server, :db_names, app, stage ]
-  path_so_far = multisite_config_hash
-  for next_segment in hash_path
-    if path_so_far[next_segment]
-      path_so_far = path_so_far[next_segment]
-    else
-      return nil
-    end
+def query_databases
+  begin
+      @databases = select_rows('show databases').flatten
+  rescue
   end
-  path_so_far
-end
-
-def multisite_config_hash
-  return @multisite_config if @multisite_config
-  file = "#{File.dirname(__FILE__)}/../moonshine_multisite.yml"
-  return {} unless File.exists?(file)
-  @multisite_config = YAML.load_file(file)
-end
-
-# Sets the key and values in capistrano from the moonshine multisite config
-def apply_moonshine_multisite_config(host, stage)
-  multisite_config_hash[:servers][host.to_sym].each do |key, value|
-    set(key.to_sym, value)
-  end
-  set :repository, multisite_config_hash[:apps][fetch(:application)]
-  set :scm, :svn if !! repository =~ /^svn/
-    # Currently there's no way to override the following settings, they're just
-    # inherent in moonshine multisite.
-    # If someone uses this and wants to override this, we can make a way to 
-    # override them in the moonshine_multisite.yml.
-    set :deploy_to, "/var/www/#{fetch(:application)}.#{stage}.#{fetch(:domain)}"
-    set :branch, "#{host}.#{stage}"
-end
-
-# Assumes that your capistrano-ext stages are actually in "host/stage", then
-# extracts the host and stage and goes to apply_moonshine_multisite_config
-def apply_moonshine_multisite_config_from_cap
-  fetch(:stage).to_s =~ /(.*)\/(.*)/
-    apply_moonshine_multisite_config $1, $2
-end
-
-def get_stages
-  multisite_config_hash[:servers].keys.collect { |host|
-    multisite_config_hash[:stages].collect{ |stage|
-      "#{host}/#{stage}"
-    }
-  }.flatten
-end
-
-def set_stages
-  set :stages, get_stages
 end
