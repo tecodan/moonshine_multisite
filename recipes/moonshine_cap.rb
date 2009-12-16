@@ -45,8 +45,7 @@ namespace :moonshine do
   DESC
   task :setup_directories do
     begin
-      config = YAML.load_file(File.join(Dir.pwd, 'config', 'moonshine.yml'))
-      put(YAML.dump(config),"/tmp/moonshine.yml")
+      put(YAML.dump(@moonshine_config),"/tmp/moonshine.yml")
     rescue Exception => e
       puts e
       puts "Please make sure the settings in moonshine.yml are valid and that the target hostname is correct."
