@@ -68,7 +68,7 @@ def clone(params)
 end
 
 def prepare_for_sql
-  unless defined?(ActiveRecord)
+  unless defined?(ActiveRecord) && @sql
     require "active_record"
     root_config
     ActiveRecord::Base.establish_connection root_config.merge('database' => '')
@@ -129,3 +129,8 @@ def query_databases
   rescue
   end
 end
+
+def debug(stmt)
+  puts stmt
+end
+

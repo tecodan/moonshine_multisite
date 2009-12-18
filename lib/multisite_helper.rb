@@ -6,8 +6,8 @@ def utopian_db_name(server, app, stage)
 end
 
 def legacy_db_name(server, app, stage)
-  return 'legacy_db_name' unless server && app && stage
-  hash_path = [ :servers, server, :db_names, app, stage ]
+  debug "[DBG] legacy_db_name server=#{server} app=#{app} stage=#{stage}"
+  hash_path = [ :servers, server.to_sym, :db_names, app.to_sym, stage.to_sym ]
   path_so_far = multisite_config_hash
   for next_segment in hash_path
     if path_so_far[next_segment]
@@ -30,37 +30,49 @@ end
 # Also sets @moonshine_config as a hash of moonshine values (similar to what
 # would be gotten from a moonshine.yml)
 def apply_moonshine_multisite_config(server, stage)
+  debug "[DBG] apply_moonshine_multisite_config server=#{server} stage=#{stage}"
   domain = multisite_config_hash[:servers][server.to_sym][:domain]
   # give some nice defaults
   @moonshine_config = {
     :server_only => server,
-    :stage_only => stage,
-    :repository => multisite_config_hash[:apps][fetch(:application)],
+    :repository => multisite_config_hash[:apps][fetch(:application).to_sym],
     :scm => if (!! repository =~ /^svn/) then :svn else :git end,
-    :branch => "#{server}.#{stage}"
+    :branch => (stage ? "#{server}.#{stage}" : nil)
   }
   @moonshine_config.merge! multisite_config_hash[:servers][server.to_sym]
+  # TODO: figure out why I need to do these next lines, after the defaults again.... :S
+  @moonshine_config.merge!({
+    # TODO: switch everything in the config to symbols
+    :deploy_to => "/var/www/#{fetch(:application)}.#{stage}.#{@moonshine_config['domain']}",
+  })
   # tie the multisite_config_hash back to the instance variabled one
   multisite_config_hash[:servers][server.to_sym] = @moonshine_config
   @moonshine_config.each do |key, value|
     set(key.to_sym, value)
   end
-  deploy_to = "/var/www/#{fetch(:application)}.#{stage}.#{fetch(:domain)}"
-  set :deploy_to, deploy_to
-  @moonshine_config[:deploy_to] = deploy_to
+  if stage
+    # don't set any stage unless given, to give error on tasks that should have it
+    @moonshine_config[:stage_only] = stage
+    set :stage_only, stage
+  end
+  set :server_only, server
+  set :moonshine_config, @moonshine_config
 end
 
 # Assumes that your capistrano-ext stages are actually in "host/stage", then
 # extracts the host and stage and goes to apply_moonshine_multisite_config
 def apply_moonshine_multisite_config_from_cap
-  fetch(:stage).to_s =~ /(.*)\/(.*)/
-  apply_moonshine_multisite_config $1, $2
+  if fetch(:stage).to_s =~ /(.*)\/(.*)/
+    apply_moonshine_multisite_config $1, $2
+  elsif fetch(:stage).to_s =~ /(.+)/
+    apply_moonshine_multisite_config $1, nil
+  end
 end
 
 def get_stages
   multisite_config_hash[:servers].keys.collect { |host|
     multisite_config_hash[:stages].collect{ |stage|
-      "#{host}/#{stage}"
+      [ "#{host}/#{stage}", "#{host}" ]
     }
   }.flatten + (multisite_config_hash[:legacy_stages].collect(&:to_s) || [])
 end
