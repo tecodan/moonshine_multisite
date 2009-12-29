@@ -24,8 +24,10 @@ namespace :moonshine do
   See also Moonshine::Multisite.apply_moonshine_multisite_config_from_cap
   DESC
   task :load_moonshine_multisite_config do
-    apply_moonshine_multisite_config_from_cap
-    server fetch(:server), :web, :app, :db
+    if apply_moonshine_multisite_config_from_cap
+      roles.clear
+      server fetch(:server), :web, :app, :db
+    end
   end
 
   desc <<-DESC
