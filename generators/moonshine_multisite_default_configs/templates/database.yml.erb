@@ -9,7 +9,7 @@ development:
   <<: *defaults
 
 test:
-  database: <%= server %>.<%= app %>.test
+  database: <%= server %>_<%= app %>_test
   <<: *defaults
 
 production:
