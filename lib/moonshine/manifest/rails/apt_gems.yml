@@ -30,5 +30,3 @@ libxml-ruby:
 image_science:
 - libfreeimage3
 - libfreeimage-dev
-geoip_city:
-- libgeoip-dev

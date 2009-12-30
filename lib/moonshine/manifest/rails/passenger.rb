@@ -55,7 +55,7 @@ module Moonshine::Manifest::Rails::Passenger
   # Creates and enables a vhost configuration named after your application.
   # Also ensures that the <tt>000-default</tt> vhost is disabled.
   def passenger_site
-    file "/etc/apache2/sites-available/#{configuration[:application]}",
+    file "/etc/apache2/sites-available/#{configuration[:server_name]}",
       :ensure => :present,
       :content => template(File.join(File.dirname(__FILE__), 'templates', 'passenger.vhost.erb')),
       :notify => service("apache2"),
@@ -63,7 +63,7 @@ module Moonshine::Manifest::Rails::Passenger
       :require => exec("a2enmod passenger")
 
     a2dissite '000-default', :require => file("passenger_vhost")
-    a2ensite configuration[:application], :require => file("passenger_vhost")
+    a2ensite configuration[:server_name], :require => file("passenger_vhost")
   end
 
   def passenger_configure_gem_path
