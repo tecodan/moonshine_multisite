@@ -20,7 +20,7 @@ if os == :debian
   system "wget -O - http://backports.org/debian/archive.key | sudo apt-key add -"
   system "echo \"deb http://www.backports.org/debian lenny-backports main contrib non-free\" | sudo tee -a /etc/apt/sources.list"
 end
-unless system("which ruby")
+unless system("which ruby") && system("which cap") && system("which gem") && system("which rails")
   if os == :debian || os == :ubuntu
     system "sudo apt-get update"
     system "sudo apt-get install ruby-full git-core libopenssl-ruby1.8 openssh-server make libmysqlclient15-dev"
