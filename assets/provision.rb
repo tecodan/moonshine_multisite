@@ -35,16 +35,20 @@ end
 
 # c4c_utility
 if File.directory?('c4c_utility')
-  system "cd c4c_utility"
+  Dir.chdir "c4c_utility"
   system "git pull"
 else
   system "git clone git://github.com/andrewroth/c4c_utility.git"
-  system "cd c4c_utility"
+  Dir.chdir "c4c_utility"
   system "git checkout -b c4c.dev origin/c4c.dev"
 end
 
 # provision
-system "/var/lib/gems/1.8/bin/rake provision:c4c:utopian HOSTS=127.0.0.1"
+if system("which rake") # in case updating again
+  system "rake provision:c4c:utopian HOSTS=127.0.0.1"
+else
+  system "/var/lib/gems/1.8/bin/rake provision:c4c:utopian HOSTS=127.0.0.1"
+end
 unless system("which cap")
   system "sudo gem install capistrano capistrano-ext" # install cap again since now REE gems is installed
 end
