@@ -25,6 +25,6 @@ sudo gem install capistrano capistrano-ext # install cap again since now REE gem
 rake provision:p2c:utopian HOSTS=127.0.0.1 skipsetup=true
 
 # pull databases
-cd /var/www/utility.local
+cd /var/www/utility.local/current
 mv config/database_root.yml.sample database_root.yml
 cap pull:dbs:utopian
