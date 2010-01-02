@@ -12,7 +12,7 @@ echo "deb http://www.backports.org/debian lenny-backports main contrib non-free"
 sudo apt-get update
 sudo apt-get install ruby-full git-core libopenssl-ruby1.8 openssh-server make libmysqlclient15-dev
 sudo apt-get install -t lenny-backports rubygems
-sudo gem install capistrano capistrano-ext rails mysql
+sudo gem install capistrano capistrano-ext rails mysql --no-rdoc
 
 # c4c_utility
 git clone git://github.com/andrewroth/c4c_utility.git
