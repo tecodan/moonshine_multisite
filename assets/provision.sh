@@ -3,7 +3,7 @@
 # deploy user
 sudo useradd -g deploy -m -d /home/deploy -k /etc/skel deploy
 echo "provide a password for the deploy user"
-sudo passwd passwd
+sudo passwd deploy
 echo "deploy  ALL=(ALL) ALL" | sudo tee -a /etc/sudoers
 
 # setup environment
