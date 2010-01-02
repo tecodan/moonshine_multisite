@@ -52,6 +52,7 @@ system "rake provision:p2c:utopian HOSTS=127.0.0.1 skipsetup=true"
 
 # pull databases
 Dir.chdir "/var/www/utility.local/current"
-system "git pull"
-system "cp config/database_root.yml.sample database_root.yml" unless File.exists?('config/database_root.yml')
-system "cap pull:dbs:utopian"
+system "sudo git checkout -b c4c.dev origin/c4c.dev"
+system "sudo git pull"
+system "sudo cp config/database_root.yml.sample database_root.yml" unless File.exists?('config/database_root.yml')
+system "sudo cap pull:dbs:utopian"
