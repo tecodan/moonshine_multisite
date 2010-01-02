@@ -30,8 +30,6 @@ unless system("which ruby")
   elsif os == :ubuntu
     system "sudo apt-get install rubygems"
   end
-end
-unless system("which cap")
   system "sudo gem install capistrano capistrano-ext rails mysql --no-rdoc"
 end
 
@@ -47,10 +45,13 @@ end
 
 # provision
 system "/var/lib/gems/1.8/bin/rake provision:c4c:utopian HOSTS=127.0.0.1"
-system "sudo gem install capistrano capistrano-ext # install cap again since now REE gems is installed"
+unless system("which cap")
+  system "sudo gem install capistrano capistrano-ext" # install cap again since now REE gems is installed
+end
 system "rake provision:p2c:utopian HOSTS=127.0.0.1 skipsetup=true"
 
 # pull databases
-system "cd /var/www/utility.local/current"
+Dir.chdir "/var/www/utility.local/current"
+system "git pull"
 system "cp config/database_root.yml.sample database_root.yml" unless File.exists?('config/database_root.yml')
 system "cap pull:dbs:utopian"
