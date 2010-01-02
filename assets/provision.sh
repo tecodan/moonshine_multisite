@@ -21,7 +21,7 @@ git checkout -b c4c.dev origin/c4c.dev
 
 # provision
 /var/lib/gems/1.8/bin/rake provision:c4c:utopian HOSTS=127.0.0.1
-gem install capistrano capistrano-ext # install cap again since now REE gems is installed
+sudo gem install capistrano capistrano-ext # install cap again since now REE gems is installed
 rake provision:p2c:utopian HOSTS=127.0.0.1 skipsetup=true
 
 # pull databases
