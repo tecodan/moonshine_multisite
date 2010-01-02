@@ -18,33 +18,36 @@ end
 # setup environment
 if os == :debian
   system "wget -O - http://backports.org/debian/archive.key | sudo apt-key add -"
-  system "echo \"deb http://www.backports.org/debian lenny-backports main contrib non-free\" | sudo tee -a /etc/apt/sources.list"
+  unless system("grep lenny-backports /etc/apt/sources.list")
+    system "echo \"deb http://www.backports.org/debian lenny-backports main contrib non-free\" | sudo tee -a /etc/apt/sources.list"
+  end
 end
-unless system("which ruby") && system("which cap") && system("which gem") && system("which rails")
-  if os == :debian || os == :ubuntu
-    system "sudo apt-get update"
-    system "sudo apt-get install ruby-full git-core libopenssl-ruby1.8 openssh-server make libmysqlclient15-dev"
-  end
-  if os == :debian
-    system "sudo apt-get install -t lenny-backports rubygems" 
-  elsif os == :ubuntu
-    system "sudo apt-get install rubygems"
-  end
+
+if os == :debian || os == :ubuntu
+  system "sudo apt-get update"
+  system "sudo apt-get install ruby-full git-core libopenssl-ruby1.8 openssh-server make libmysqlclient15-dev"
+end
+if os == :debian
+  system "sudo apt-get install -t lenny-backports rubygems" 
+elsif os == :ubuntu
+  system "sudo apt-get install rubygems"
+end
+unless system("gem list --local | grep capistrano")
   system "sudo gem install capistrano capistrano-ext rails mysql --no-rdoc"
 end
 
 # c4c_utility
 if File.directory?('c4c_utility')
   Dir.chdir "c4c_utility"
-  system "git pull"
+  system "sudo git pull"
 else
-  system "git clone git://github.com/andrewroth/c4c_utility.git"
+  system "sudo git clone git://github.com/andrewroth/c4c_utility.git"
   Dir.chdir "c4c_utility"
-  system "git checkout -b c4c.dev origin/c4c.dev"
+  system "sudo git checkout -b c4c.dev origin/c4c.dev"
 end
 
 # provision
-if system("which rake") # in case updating again
+if system("which rake") # in case updating again after a partially completed one
   system "rake provision:c4c:utopian HOSTS=127.0.0.1"
 else
   system "/var/lib/gems/1.8/bin/rake provision:c4c:utopian HOSTS=127.0.0.1"
