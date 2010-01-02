@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # deploy user
-sudo useradd -g deploy -m -d /home/deploy -k /etc/skel deploy
+sudo groupadd deploy
+sudo useradd -g deploy -m -d /home/deploy -k /etc/skel -s /bin/bash deploy
 echo "provide a password for the deploy user"
 sudo passwd deploy
 echo "deploy  ALL=(ALL) ALL" | sudo tee -a /etc/sudoers
