@@ -84,6 +84,52 @@ There are some extra cap tasks for working with these files manually, if needed:
 The old <tt>local_config</tt> functionality is still supported, but
 <tt>shared_config</tt> is recommended.
 
+You can also specify a local file:
+
+    set :local_config { 'local_folder/database.yml', 'config/database.yml' }
+
+If the local file is missing, the upload is skipped and it is symlinked to
+the shared folder file.
+
+=== Multisite
+
+I (Andrew Roth) added multisite support.  This is useful if you have a suite of
+web applications that you want to install to one or more servers.  It also uses
+capistrano-ext for stage support.  
+
+For example, suppose you had a web app "app1" and stages "dev", "prod" and
+domains "foo-domain.com" and "bar-domain.com".  You would have:
+
+* config file moonshine_multisite.yml in the moonshine_multisite plugin directory.
+* shortcuts "foo" and "bar" to refer to those servers 
+* four stages: foo/dev, foo/prod, bar/dev, bar/prod
+* cap foo/dev deploy, cap foo/prod deploy tasks (same with deploy:setup)
+
+The process is:
+
+1. github fork this repository
+
+2. use moonshine_multisite.simple.yml to make a moonshine_multisite.yml with your own stages and server info.  You will choose a short "app identifier" for each app and "host identifier" for each server.
+
+3. install capistrano-ext
+
+sudo gem install capistrano-ext
+
+4. in each of your sites, install your moonshine_multisite
+
+    ruby script/plugin install git://github.com/your_username/moonshine_multisite.git
+
+5. in your applications, make a new branch for each host and stage with the name <host identifier>.<stage>.  For example, branches abc.dev, abc.prod if you have a host identifier abc and stages dev and prod.  Make sure these branches have moonshine_multisite and capistrano-ext.
+
+6. to deploy the first application, run
+    cap <host identifier>/<stage> deploy:setup
+    cap <host identifier>/<stage> deploy
+7. to deploy more sites to the server, don't run deploy:setup again, as that will compile ruby enterprise edition again.  Instead, run
+    cap <host identifier>/<stage> moonshine:setup_directories
+    cap <host identifier>/<stage> deploy
+
+TODO: provioning rake task, database setup/copying/downloading
+
 === Running Tests
 
 To run the test suite, follow these steps to create a testbed app:
