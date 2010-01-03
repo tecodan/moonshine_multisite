@@ -36,30 +36,19 @@ unless system("gem list --local | grep capistrano")
   system "sudo gem install capistrano capistrano-ext rails mysql --no-rdoc"
 end
 
-# c4c_utility
-if File.directory?('c4c_utility')
-  Dir.chdir "c4c_utility"
+# utility replace with your settings
+utility_dir = 'utility'
+utility_repo = 'git://repo'
+utility_branch = 'server.stage'
+if File.directory?(utility_dir)
+  Dir.chdir utility_dir
   system "sudo git pull"
 else
-  system "sudo git clone git://github.com/andrewroth/c4c_utility.git"
-  Dir.chdir "c4c_utility"
-  system "sudo git checkout -b c4c.dev origin/c4c.dev"
+  system "sudo git clone #{utility_repo}"
+  Dir.chdir utility_dir
+  system "sudo git checkout -b #{utility_branch} origin/#{utility_branch}"
 end
 
 # provision
-if system("which rake") # in case updating again after a partially completed one
-  system "rake provision:c4c:utopian HOSTS=127.0.0.1"
-else
-  system "/var/lib/gems/1.8/bin/rake provision:c4c:utopian HOSTS=127.0.0.1"
-end
-unless system("which cap")
-  system "sudo gem install capistrano capistrano-ext" # install cap again since now REE gems is installed
-end
-system "rake provision:p2c:utopian HOSTS=127.0.0.1 skipsetup=true"
-
-# pull databases
-Dir.chdir "/var/www/utility.local/current"
-system "sudo git checkout -b c4c.dev origin/c4c.dev"
-system "sudo git pull"
 system "sudo cp config/database_root.yml.sample database_root.yml" unless File.exists?('config/database_root.yml')
-system "sudo cap pull:dbs:utopian"
+system "/var/lib/gems/1.8/bin/rake provision:this:dev HOSTS=127.0.0.1"
