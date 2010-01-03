@@ -25,12 +25,12 @@ end
 
 if os == :debian || os == :ubuntu
   system "sudo apt-get update"
-  system "sudo apt-get install ruby-full git-core libopenssl-ruby1.8 openssh-server make libmysqlclient15-dev"
+  system "sudo apt-get -q -y install ruby-full git-core libopenssl-ruby1.8 openssh-server make libmysqlclient15-dev"
 end
 if os == :debian
-  system "sudo apt-get install -t lenny-backports rubygems" 
+  system "sudo apt-get -q -y install -t lenny-backports rubygems" 
 elsif os == :ubuntu
-  system "sudo apt-get install rubygems"
+  system "sudo apt-get -q -y install rubygems"
 end
 unless system("gem list --local | grep capistrano")
   system "sudo gem install capistrano capistrano-ext rails mysql --no-rdoc"
