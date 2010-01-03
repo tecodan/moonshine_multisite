@@ -38,7 +38,7 @@ end
 
 # utility replace with your settings
 utility_dir = 'c4c_utility'
-utility_repo = 'git@github.com:andrewroth/c4c_utility.git'
+utility_repo = 'git://github.com/andrewroth/c4c_utility.git'
 utility_branch = 'c4c.dev'
 if File.directory?(utility_dir)
   Dir.chdir utility_dir
