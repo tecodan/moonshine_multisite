@@ -1,9 +1,15 @@
 #!/bin/bash
 
+echo This installer will set up your computer for development with DIVISION HERE.  It will do a number of package installs, including rails, mysql and ruby enterprise edition.  If you have a working rails setup already, you should probably not use this installer unless you\'ve looked at it and know what it will do.
+echo
+echo Press enter to continue, or ctrl-C to abort.
+echo
+read -p
+
 ruby_output="$(which ruby)"
 
 if [ -z "$ruby_output" ]; then
-    sudo apt-get install ruby
+    sudo apt-get -q -y install ruby
 fi
 
 rm provision.rb
