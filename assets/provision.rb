@@ -22,7 +22,7 @@ if os == :debian
     system "echo \"deb http://www.backports.org/debian lenny-backports main contrib non-free\" | sudo tee -a /etc/apt/sources.list"
     system "sudo apt-get update"
   end
-  system "sudo apt-get install -t lenny-backports rubygems"
+  system "sudo apt-get install -q -y -t lenny-backports rubygems"
 else
   system "sudo apt-get update"
   system "sudo apt-get install rubygems"
@@ -31,7 +31,9 @@ end
 # add rake, git (which will install ruby as well)
 if os == :debian || os == :ubuntu
   system "sudo apt-get install -q -y git-core libopenssl-ruby1.8 rake git-core"
-  system "sudo gem install capistrano capistrano-ext --no-rdoc"
+  unless system("gem list --local | grep capistrano")
+    system "sudo gem install capistrano capistrano-ext --no-rdoc"
+  end
 end
 
 # cap
