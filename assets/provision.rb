@@ -15,25 +15,28 @@ unless system("grep deploy /etc/passwd")
   system "echo \"deploy  ALL=(ALL) ALL\" | sudo tee -a /etc/sudoers"
 end
 
-# setup environment
+# add rubygems (so we can add capistrano)
 if os == :debian
   system "wget -O - http://backports.org/debian/archive.key | sudo apt-key add -"
   unless system("grep lenny-backports /etc/apt/sources.list")
     system "echo \"deb http://www.backports.org/debian lenny-backports main contrib non-free\" | sudo tee -a /etc/apt/sources.list"
+    system "sudo apt-get update"
   end
+  system "sudo apt-get install -t lenny-backports rubygems"
+else
+  system "sudo apt-get update"
+  system "sudo apt-get install rubygems"
 end
 
+# add rake, git (which will install ruby as well)
 if os == :debian || os == :ubuntu
-  system "sudo apt-get update"
-  system "sudo apt-get -q -y install ruby-full git-core libopenssl-ruby1.8 openssh-server make libmysqlclient15-dev"
+  system "sudo apt-get install -q -y git-core libopenssl-ruby1.8 rake git-core"
+  system "sudo gem install capistrano capistrano-ext --no-rdoc"
 end
-if os == :debian
-  system "sudo apt-get -q -y install -t lenny-backports rubygems" 
-elsif os == :ubuntu
-  system "sudo apt-get -q -y install rubygems"
-end
+
+# cap
 unless system("gem list --local | grep capistrano")
-  system "sudo gem install capistrano capistrano-ext rails mysql --no-rdoc"
+  system "sudo gem install capistrano capistrano-ext --no-rdoc"
 end
 
 # utility replace with your settings
@@ -51,4 +54,4 @@ end
 
 # provision
 system "sudo cp config/database_root.yml.sample database_root.yml" unless File.exists?('config/database_root.yml')
-system "/var/lib/gems/1.8/bin/rake provision:this:dev HOSTS=127.0.0.1"
+system "rake -f vendor/plugins/moonshine_multisite/lib/tasks/provision.rake provision:this:dev"
