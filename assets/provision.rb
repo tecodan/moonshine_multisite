@@ -42,9 +42,9 @@ unless system("gem list --local | grep capistrano")
 end
 
 # utility replace with your settings
-utility_dir = 'utility'
-utility_repo = 'git://repo'
-utility_branch = 'server.stage'
+utility_dir = 'c4c_utility'
+utility_repo = 'git://github.com/andrewroth/c4c_utility.git'
+utility_branch = 'c4c.dev'
 if File.directory?(utility_dir)
   Dir.chdir utility_dir
   system "sudo git pull"
