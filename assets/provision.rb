@@ -56,7 +56,8 @@ end
 
 # special case for colinux -- put /var/www on the windows drive
 if system("uname -r | grep co") && system("df | grep /mnt/win")
-  system "sudo mkdir /var/www"
+  system "sudo apt-get remove -q -y latext2html" # latex2html puts stuff in /var/www
+  system "sudo mkdir /mnt/win/www"
   system "sudo ln -s /mnt/win/www /var/www"
 end
 
