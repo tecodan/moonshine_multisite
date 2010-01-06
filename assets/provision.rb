@@ -25,7 +25,7 @@ if os == :debian
   system "sudo apt-get install -q -y -t lenny-backports rubygems"
 else
   system "sudo apt-get update"
-  system "sudo apt-get install rubygems"
+  system "sudo apt-get install -q -y rubygems"
 end
 
 # add rake, git (which will install ruby as well)
