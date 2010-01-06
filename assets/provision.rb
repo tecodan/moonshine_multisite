@@ -54,6 +54,15 @@ else
   system "sudo git checkout -b #{utility_branch} origin/#{utility_branch}"
 end
 
+# special case for colinux -- put /var/www on the windows drive
+if system("uname -r | grep co") && system("df | grep /mnt/win")
+  system "sudo mkdir /var/www"
+  system "sudo ln -s /mnt/win/www /var/www"
+end
+
 # provision
 system "sudo cp config/database_root.yml.sample database_root.yml" unless File.exists?('config/database_root.yml')
 system "rake -f vendor/plugins/moonshine_multisite/lib/tasks/provision.rake provision:this:dev"
+
+# install cap again with the new gems
+system "sudo gem install capistrano capistrano-ext --no-rdoc"
