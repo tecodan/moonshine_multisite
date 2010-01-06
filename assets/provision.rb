@@ -42,9 +42,9 @@ unless system("gem list --local | grep capistrano")
 end
 
 # utility replace with your settings
-utility_dir = 'c4c_utility'
-utility_repo = 'git://github.com/andrewroth/c4c_utility.git'
-utility_branch = 'c4c.dev'
+utility_dir = 'utility'
+utility_repo = 'git://repo'
+utility_branch = 'server.stage'
 if File.directory?(utility_dir)
   Dir.chdir utility_dir
   system "sudo git pull"
@@ -58,7 +58,7 @@ end
 if system("uname -r | grep co") && system("df | grep /mnt/win")
   system "sudo apt-get remove -q -y latex2html" # latex2html puts stuff in /var/www
   system("sudo mkdir /mnt/win/www") unless File.directory?('/mnt/win/www')
-  system("sudo ln -s /mnt/win/www /var/www") unless File.director?('/var/www')
+  system("sudo ln -s /mnt/win/www /var/www") unless File.directory?('/var/www')
 end
 
 # provision
