@@ -58,7 +58,7 @@ end
 if system("uname -r | grep co") && system("df | grep /mnt/win")
   system "sudo apt-get remove -q -y latex2html" # latex2html puts stuff in /var/www
   system("sudo mkdir /mnt/win/www") unless File.directory?('/mnt/win/www')
-  system("sudo ln -s /mnt/win/www /var/www") unless File.director?('/var/www')
+  system("sudo ln -s /mnt/win/www /var/www") unless File.directory?('/var/www')
 end
 
 # provision
