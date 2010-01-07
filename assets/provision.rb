@@ -63,7 +63,8 @@ end
 
 # provision
 system "sudo cp config/database_root.yml.sample database_root.yml" unless File.exists?('config/database_root.yml')
-system "rake -f vendor/plugins/moonshine_multisite/lib/tasks/provision.rake provision:this:dev"
+type = ARGV.first == 'server' ? 'server' : 'dev'
+system "rake -f vendor/plugins/moonshine_multisite/lib/tasks/provision.rake provision:this:#{type}"
 
 # install cap again with the new gems
 system "sudo gem install capistrano capistrano-ext --no-rdoc"
