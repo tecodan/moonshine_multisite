@@ -1,11 +1,10 @@
 MOONSHINE_MULTISITE_ROOT = "#{File.dirname(__FILE__)}/../.."
 RAILS_ROOT = "#{MOONSHINE_MULTISITE_ROOT}/../../.."
 require MOONSHINE_MULTISITE_ROOT + '/lib/multisite_helper.rb'
+require MOONSHINE_MULTISITE_ROOT + '/lib/rake_helper.rb'
 
-begin # some servers don't like this, don't know why
-  require 'capistrano/cli'
-rescue MissingSourceFile => ex
-end
+require 'rubygems'
+require 'capistrano/cli'
 require 'ftools'
 
 namespace :provision do
@@ -20,6 +19,7 @@ namespace :provision do
       @p2c_password = STDIN.gets.chomp
       ENV['HOSTS'] = '127.0.0.1'
       provision(:c4c, multisite_config_hash[:servers][:c4c], true)
+      ENV['skipsetup'] = 'true'
       provision(:p2c, multisite_config_hash[:servers][:p2c], true)
       # p2c
       ENV.delete 'HOSTS'
@@ -28,6 +28,21 @@ namespace :provision do
       run_cap nil, "pull:dbs:utopian"
     end
     task :server do
+      STDOUT.print "Enter the password for deploy@localhost: "
+      @local_password = STDIN.gets.chomp
+      STDOUT.print "Enter the password for deploy@pat.powertochange.org: "
+      @p2c_password = STDIN.gets.chomp
+      # download private
+      @password = @p2c_password
+      new_cap "p2c", nil, nil, true
+      run_cap nil, "moonshine:secure:download_private"
+      # now provision
+      @password = @local_password
+      @cap_config = nil # force new password to take effect
+      ENV['HOSTS'] = '127.0.0.1'
+      provision(:c4c, multisite_config_hash[:servers][:c4c], false)
+      ENV['skipsetup'] = 'true'
+      provision(:p2c, multisite_config_hash[:servers][:p2c], false)
     end
   end
 
@@ -206,18 +221,19 @@ def provision(server, server_config, utopian)
       end
       @cap_config.put db_file, "#{@cap_config.fetch(:shared_path)}/config/database.yml"
       @cap_config.put YAML::dump(@cap_config.fetch(:moonshine_config)), "#{@cap_config.fetch(:shared_path)}/config/moonshine.yml"
-      run_cap cap_stage, "deploy"
-      run_cap cap_stage, "shared_config:symlink"
-
       # upload certs if possible
       if @cap_config.fetch(:certs, nil).is_a?(Hash)
         @cap_config.fetch(:certs).each do |local_file, remote_file|
           base_name = File.basename(remote_file)
           tmp_file = "/tmp/#{base_name}"
           @cap_config.upload local_file, tmp_file
+          @cap_config.sudo "mkdir -p #{File.dirname(remote_file)}"
           @cap_config.sudo "mv #{tmp_file} #{remote_file}"
         end
       end
+
+      run_cap cap_stage, "deploy"
+      run_cap cap_stage, "shared_config:symlink"
     end
   end
 end
