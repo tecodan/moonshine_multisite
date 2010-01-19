@@ -41,6 +41,9 @@ unless system("gem list --local | grep capistrano")
   system "sudo gem install capistrano capistrano-ext --no-rdoc"
 end
 
+# add openssh-server
+system "sudo apt-get install -q -y openssh-server"
+
 # utility replace with your settings
 utility_dir = 'c4c_utility'
 utility_repo = 'git://github.com/andrewroth/c4c_utility.git'
