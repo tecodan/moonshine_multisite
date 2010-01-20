@@ -21,7 +21,7 @@ namespace :git do
       multisite_config_hash[:stages].each do |stage|
         branch = "#{server}.#{stage}"
         remote_branch = "origin/#{branch}"
-        if system("git branch -r | grep #{remote_branch} > /dev/null") && !system("git branch | grep #{branch} > /dev/null")
+        if system("git branch -r | egrep '  #{remote_branch}$' > /dev/null") && !system("git branch | egrep '( |\*) #{branch}$' > /dev/null")
           system("git branch #{branch} #{remote_branch}")
         end
       end
