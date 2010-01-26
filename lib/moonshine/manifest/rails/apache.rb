@@ -41,7 +41,11 @@ STATUS
       :content => status,
       :notify => service("apache2")
     file '/etc/logrotate.d/varlogapachelog.conf', :ensure => :absent
+<<<<<<< HEAD:lib/moonshine/manifest/rails/apache.rb
     nvh = <<-PORTS
+=======
+    ports = <<-PORTS
+>>>>>>> railsmachine_multisite:lib/moonshine/manifest/rails/apache.rb
 NameVirtualHost #{configuration[:lan_ip]}:443
 PORTS
     file "/etc/apache2/conf.d/#{configuration[:domain]}.ports.conf",
