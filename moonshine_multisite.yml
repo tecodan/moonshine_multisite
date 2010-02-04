@@ -25,6 +25,9 @@
       :private_host: 208.87.54.217
       :private_user: deploy
       :ssl: true
+      :shared_config:
+        - config/database.yml
+        - config/database.emu.yml
       :certs:
         "app/manifests/assets/private/certs/campusforchrist.org.cert": "/etc/apache2/certs/campusforchrist.org.cert"
         "app/manifests/assets/private/certs/campusforchrist.org.key": "/etc/apache2/certs/campusforchrist.org.key"
@@ -44,9 +47,7 @@
             - moose.campusforchrist.org
         :staging: 
           :db_name: emu_stage
-          :server_name: pulse.staging.campusforchrist.org
-          :server_aliases:
-            - emu.campusforchrist.org
+          :server_name: pulse.dev.campusforchrist.org
       :intranet:
         :prod:
           :db_name: ciministry
