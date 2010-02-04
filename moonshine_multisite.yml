@@ -44,7 +44,9 @@
             - moose.campusforchrist.org
         :staging: 
           :db_name: emu_stage
-          :server_name: pulse.dev.campusforchrist.org
+          :server_name: pulse.staging.campusforchrist.org
+          :server_aliases:
+            - emu.campusforchrist.org
       :intranet:
         :prod:
           :db_name: ciministry
