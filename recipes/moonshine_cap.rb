@@ -52,7 +52,6 @@ namespace :moonshine do
     ruby.install
     vcs.install
     moonshine.setup_directories
-    shared_config.upload
   end
 
   desc <<-DESC
