@@ -30,7 +30,7 @@ end
 
 # add rake, git (which will install ruby as well)
 if os == :debian || os == :ubuntu
-  system "sudo apt-get install -q -y git-core libopenssl-ruby1.8 rake git-core libiconv-ruby"
+  system "sudo apt-get install -q -y git-core libopenssl-ruby1.8 rake git-core"
   unless system("gem list --local | grep capistrano")
     system "sudo gem install capistrano capistrano-ext --no-rdoc --no-ri"
   end
@@ -67,7 +67,7 @@ end
 # provision
 system "sudo cp config/database_root.yml.sample database_root.yml" unless File.exists?('config/database_root.yml')
 type = ARGV.first == 'server' ? 'server' : 'dev'
-system "rake -f vendor/plugins/moonshine_multisite/lib/tasks/provision.rake provision:this:#{type}"
+system "rake -f vendor/plugins/moonshine_multisite/lib/tasks/provision.rake provision:this:#{type} --trace"
 
 # install cap again with the new gems
 system "sudo gem install capistrano capistrano-ext --no-rdoc --no-ri"
