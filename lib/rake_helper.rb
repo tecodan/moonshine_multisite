@@ -69,7 +69,6 @@ end
 
 def prepare_for_sql
   unless defined?(ActiveRecord) && @sql
-    require "rubygems"
     require "active_record"
     root_config
     ActiveRecord::Base.establish_connection root_config.merge('database' => '')
