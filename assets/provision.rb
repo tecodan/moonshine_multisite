@@ -34,6 +34,9 @@ if os == :debian || os == :ubuntu
   unless system("gem list --local | grep capistrano")
     system "sudo gem install capistrano capistrano-ext --no-rdoc"
   end
+  unless system("gem list --local | grep activerecord")
+    system "sudo gem install activerecord --no-rdoc"
+  end
 end
 
 # cap
