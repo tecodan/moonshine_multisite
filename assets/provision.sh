@@ -12,4 +12,4 @@ fi
 
 rm provision.rb
 wget http://github.com/andrewroth/moonshine_multisite/raw/ministry_hacks/assets/provision.rb
-sudo ruby provision.rb $1
+ruby provision.rb $1
