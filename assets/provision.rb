@@ -1,3 +1,5 @@
+type = ARGV.first == 'server' ? 'server' : 'dev'
+
 if RUBY_PLATFORM['linux']
   issue = File.read "/etc/issue"
   os = :debian if issue['Debian']
@@ -7,7 +9,7 @@ elsif RUBY_PLATOFRM['darwin']
 end
 
 # deploy user
-unless system("grep deploy /etc/passwd")
+unless type == 'dev' || system("grep deploy /etc/passwd")
   system "sudo groupadd deploy"
   system "sudo useradd -g deploy -m -d /home/deploy -k /etc/skel -s /bin/bash deploy"
   system "echo \"provide a password for the deploy user\""
@@ -66,7 +68,6 @@ end
 
 # provision
 system "sudo cp config/database_root.yml.sample database_root.yml" unless File.exists?('config/database_root.yml')
-type = ARGV.first == 'server' ? 'server' : 'dev'
 system "rake -f vendor/plugins/moonshine_multisite/lib/tasks/provision.rake provision:this:#{type} --trace"
 
 # install cap again with the new gems
