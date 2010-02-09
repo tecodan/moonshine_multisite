@@ -30,7 +30,7 @@ end
 
 # add rake, git (which will install ruby as well)
 if os == :debian || os == :ubuntu
-  system "sudo apt-get install -q -y git-core libopenssl-ruby1.8 rake git-core"
+  system "sudo apt-get install -q -y git-core libopenssl-ruby1.8 rake git-core libiconv-ruby"
   unless system("gem list --local | grep capistrano")
     system "sudo gem install capistrano capistrano-ext --no-rdoc"
   end
