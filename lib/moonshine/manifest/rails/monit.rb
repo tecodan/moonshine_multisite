@@ -13,6 +13,18 @@ module Moonshine::Manifest::Rails::Monit
         :content => template(File.join(File.dirname(__FILE__), 'templates', 'dj_monit.monitrc.erb')),
         :before => exec("monit_restart")
     end
+    file "/etc/monit/monitrc",
+      :ensure => :present,
+      :before => exec("monit_restart"),
+      :content => %|
+include /etc/monit.d/*
+|
+    file "/etc/default/monit"
+      :ensure => :present,
+      :before => exec("monit_restart"),
+      :content => %|
+startup=1
+|
     monit_restart
   end
 
