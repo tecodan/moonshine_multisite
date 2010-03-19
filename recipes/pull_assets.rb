@@ -27,7 +27,7 @@ task :pull_assets do
   pull_asset '/var/www/pulse.campusforchrist.org/shared/public/emu.profile_pictures',
     '/var/www/pulse.campusforchrist.org/shared/public/emu.profile_pictures'
   pull_asset '/var/www/moose.campusforchrist.org/shared/public/emu_dev.profile_pictures',
-    '/var/www/moose.campusforchrist.org/shared/public/emu_dev.profile_pictures'
+    '/var/www/pulse.dev.campusforchrist.org/shared/public/emu_dev.profile_pictures'
   pull_asset '/var/www/emu.campusforchrist.org/shared/public/emu_stage.profile_pictures',
-    '/var/www/emu.campusforchrist.org/shared/public/emu_stage.profile_pictures'
+    '/var/www/pulse.staging.campusforchrist.org/shared/public/emu_stage.profile_pictures'
 end
