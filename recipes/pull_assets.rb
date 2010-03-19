@@ -1,7 +1,7 @@
 def pull_assets(remote, local)
   run "tar -czf #{remote}.tar.gz #{remote}"
   download "#{remote}.tar.gz", "#{local}.tar.gz"
-  puts "tar -xfz #{local}.tar.gz"
+  puts "tar xfz #{local}.tar.gz"
   system "tar xfz #{local}.tar.gz"
 end
 
