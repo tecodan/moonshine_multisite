@@ -42,7 +42,7 @@
         "app/manifests/assets/private/certs/campusforchrist.org.cert": "/etc/apache2/certs/campusforchrist.org.cert"
         "app/manifests/assets/private/certs/campusforchrist.org.key": "/etc/apache2/certs/campusforchrist.org.key"
       :ruby: ree187 
-      :utility: /var/www/utility.campusforchrist.org/current
+      :common: /var/www/common.campusforchrist.org/current
       :skip_deploy: false
     :stage_moonshines:
       :pulse:
@@ -70,11 +70,11 @@
         :staging:
           :db_name: dev_campusforchrist
           :skip_deploy: true
-      :utility:
+      :common:
         :dev:
           :delayed_job: false
-          :db_name: c4c_utility
-          :server_name: utility.campusforchrist.org
+          :db_name: c4c_common
+          :server_name: common.campusforchrist.org
           :skip_pull: true
     :local:
       :moonshine:
@@ -106,15 +106,15 @@
           :staging:
             :db_name: c4c_intranet_staging
             :skip_deploy: true
-        :utility:
+        :common:
           :prod:
             :db_name: utopian_cdm_prod
             :skip_deploy: true
           :dev:
             :db_name: utopian_cdm_dev
             :delayed_job: false
-            :server_name: utility.local
-            :deploy_to: /var/www/utility.local
+            :server_name: common.local
+            :deploy_to: /var/www/common.local
           :staging:
             :db_name: utopian_cdm_staging
             :skip_deploy: true
@@ -131,7 +131,7 @@
       :private_user: deploy
       :ssl: true
       :ruby: ree187 
-      :utility: /var/www/utility.campusforchrist.org/current
+      :common: /var/www/common.campusforchrist.org/current
       :shared_children:
         - config
         - log
@@ -217,7 +217,7 @@
       :private_user: deploy
       :ssl: false
       :ruby: ree187 
-      :utility: /var/www/utility.ministryhacks.com/current
+      :common: /var/www/common.ministryhacks.com/current
       :shared_children:
         - config
         - log
@@ -277,11 +277,11 @@
           :db_name: mh_pulse_staging
           :server_name: pulse.staging.ministryhacks.com
           :delayed_job: true
-#      :utility:
+#      :common:
 #        :dev:
 #          :delayed_job: false
-#          :db_name: c4c_utility
-#          :server_name: utility.ministryhacks.org
+#          :db_name: c4c_common
+#          :server_name: common.ministryhacks.org
 #          :skip_pull: true
     :local:
       :moonshine:
@@ -325,14 +325,14 @@
           :staging:
             :db_name: mh_pulse_staging
             :skip_deploy: true
-#        :utility:
+#        :common:
 #          :dev:
-#            :db_name: c4c_utility
-#            :deploy_to: /var/www/utility.local
+#            :db_name: c4c_common
+#            :deploy_to: /var/www/common.local
 #            :skip_pull: true 
 :apps:
   :pat: git://github.com/andrewroth/project_application_tool.git
   :pulse: git://github.com/twinge/ministry-tracker.git
   :intranet: 
-  :utility: git://github.com/andrewroth/c4c_utility.git
+  :common: git://github.com/andrewroth/mh_common_app.git
   :mpdtool: git://github.com/twinge/mpd_tool.git
