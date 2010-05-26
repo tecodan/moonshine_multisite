@@ -130,10 +130,13 @@ To download all the database info, run:
 end
 
 
-# fix rake collisions with capistrano
-undef :symlink
-undef :ruby
-undef :install
+def undefine
+  # fix rake collisions with capistrano
+  throw self.inspect
+  undef :symlink
+  undef :ruby
+  undef :install
+end
 
 def run_shell(cmd)
   debug "[SH ] #{cmd}"
@@ -203,6 +206,7 @@ end
 =end
 
 def provision(server, server_config, utopian, apps_filter = nil)
+  undefine
   debug "[DBG] setup #{server} utopian=#{utopian}"
   debug "[DBG] config #{server_config.inspect}"
   tmp_dir = "#{RAILS_ROOT}/tmp"
