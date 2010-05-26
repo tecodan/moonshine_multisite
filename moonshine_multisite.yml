@@ -107,11 +107,17 @@
             :db_name: c4c_intranet_staging
             :skip_deploy: true
         :utility:
+          :prod:
+            :db_name: utopian_cdm_prod
+            :skip_deploy: true
           :dev:
-            #:db_name: c4c_utility
+            :db_name: utopian_cdm_dev
             :delayed_job: false
             :server_name: utility.local
             :deploy_to: /var/www/utility.local
+          :staging:
+            :db_name: utopian_cdm_staging
+            :skip_deploy: true
   :p2c:
     :moonshine:
       :user: deploy

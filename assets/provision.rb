@@ -48,9 +48,9 @@ end
 system "sudo apt-get install -q -y openssh-server"
 
 # utility replace with your settings
-utility_dir = 'c4c_utility'
-utility_repo = 'git://github.com/andrewroth/c4c_utility.git'
-utility_branch = 'c4c.dev'
+utility_dir = 'mh_common_app'
+utility_repo = 'git://github.com/andrewroth/mh_common_app.git'
+utility_branch = 'master'
 if File.directory?(utility_dir)
   Dir.chdir utility_dir
   system "git pull"
