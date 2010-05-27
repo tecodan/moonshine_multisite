@@ -36,11 +36,15 @@ def traverse_hash(hash, hash_path)
   return path_so_far
 end
 
-def multisite_config_hash
+def multisite_config_hash(erb = true)
   return @multisite_config if @multisite_config
   file = "#{File.dirname(__FILE__)}/../moonshine_multisite.yml"
   return {} unless File.exists?(file)
-  @multisite_config = YAML.load(ERB.new(File.read(file)).result)
+  if erb
+    @multisite_config = YAML.load(ERB.new(File.read(file)).result)
+  else
+    @multisite_config = YAML.load(File.read(file))
+  end
 end
 
 # Sets the key and values in capistrano from the moonshine multisite config
