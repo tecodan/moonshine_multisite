@@ -5,6 +5,7 @@
 - :prod
 - :staging
 - :dev
+- :test
 
 # legacy_stages are optional - sets up some stages for use without capistrano-ext
 # this is useful if you have a sysadmin who doesn't want to use moonshine
@@ -108,15 +109,18 @@
             :skip_deploy: true
         :common:
           :prod:
-            :db_name: utopian_cdm_prod
+            :db_name: c4c_common_prod
             :skip_deploy: true
           :dev:
-            :db_name: utopian_cdm_dev
+            :db_name: c4c_common_dev
             :delayed_job: false
             :server_name: common.local
             :deploy_to: /var/www/common.local
           :staging:
             :db_name: utopian_cdm_staging
+            :skip_deploy: true
+          :test:
+            :db_name: utopian_cdm_test
             :skip_deploy: true
   :p2c:
     :moonshine:
@@ -330,6 +334,74 @@
 #            :db_name: c4c_common
 #            :deploy_to: /var/www/common.local
 #            :skip_pull: true 
+  :utopian:
+    :local:
+      :stage_moonshines:
+        :pat:
+          :prod:
+            :db_name: utopian_pat_prod
+            :skip_deploy: true
+          :dev: 
+            :db_name: utopian_pat_dev
+            :delayed_job: true
+          :staging:
+            :db_name: utopian_pat_staging
+            :skip_deploy: true
+          :test:
+            :db_name: utopian_pat_test
+            :skip_deploy: true
+        :pulse:
+          :prod:
+            :db_name: utopian_pulse_prod
+            :skip_deploy: true
+          :dev: 
+            :db_name: utopian_pulse_dev
+            :delayed_job: true
+          :staging:
+            :db_name: utopian_pulse_staging
+            :skip_deploy: true
+          :test:
+            :db_name: utopian_pulse_test
+            :skip_deploy: true
+        :common:
+          :prod:
+            :db_name: utopian_common_prod
+            :skip_deploy: true
+          :dev: 
+            :db_name: utopian_common_dev
+            :delayed_job: true
+          :staging:
+            :db_name: utopian_common_staging
+            :skip_deploy: true
+          :test:
+            :db_name: utopian_common_test
+            :skip_deploy: true
+        :intranet:
+          :prod:
+            :db_name: utopian_intranet_prod
+            :skip_deploy: true
+          :dev: 
+            :db_name: utopian_intranet_dev
+            :delayed_job: true
+          :staging:
+            :db_name: utopian_intranet_staging
+            :skip_deploy: true
+          :test:
+            :db_name: utopian_intranet_test
+            :skip_deploy: true
+        :mpdtool:
+          :prod:
+            :db_name: utopian_mpdtool_prod
+            :skip_deploy: true
+          :dev: 
+            :db_name: utopian_mpdtool_dev
+            :delayed_job: true
+          :staging:
+            :db_name: utopian_mpdtool_staging
+            :skip_deploy: true
+          :test:
+            :db_name: utopian_mpdtool_test
+            :skip_deploy: true
 :apps:
   :pat: git://github.com/andrewroth/project_application_tool.git
   :pulse: git://github.com/twinge/ministry-tracker.git
