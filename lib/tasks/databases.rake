@@ -100,9 +100,31 @@ multisite_config_hash[:servers].keys.each do |server|
         next if stage == :test
         namespace stage do
           desc "Prepares all #{server} databases with #{stage} schema."
-          task :prepare do
-            multisite_config_hash[:apps].keys.each do |app|
+          task :prepare => :environment do
+            require 'uri'
+            require 'net/http'
+            multisite_config_hash[:apps].each_pair.each do |app, git|
               puts "PREPARE #{server} #{stage} #{app}"
+              puts git
+              git =~ /github.com\/(.*)\/(.*)\.git/
+              if $1 && $2
+                server = Cdm::SERVER == "utopian" ? "" : "#{Cdm::SERVER}."
+                branch = "#{server}#{stage}"
+                url = "http://github.com/#{$1}/#{$2}/raw/#{branch}/db/development_structure.sql"
+                puts url
+                r = Net::HTTP.get_response(URI.parse(url))
+                next if r.class == Net::HTTPNotFound
+
+                # at this point r.body has the SQL to execute - need to load it to the right db
+                test_config = ActiveRecord::Base.configurations["#{app}_test"]
+                
+                tmp_file = File.new("tmp/structure.sql", "w+")
+                tmp_file.write(r.body)
+                tmp_file.close
+
+                prepare_for_sql('', true)
+                load_dump(tmp_file.path, test_config["database"])
+              end
             end
           end
         end
