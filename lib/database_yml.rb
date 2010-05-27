@@ -51,7 +51,7 @@ test:
   <<: *defaults
 
 #{app}_test:
-  database: #{local_db_name(server, app, stage)}
+  database: #{local_db_name(server, app, "test")}
   <<: *defaults
 
 |
