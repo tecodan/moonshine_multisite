@@ -92,3 +92,21 @@ namespace :create do
     end
   end
 end
+
+multisite_config_hash[:servers].keys.each do |server|
+  namespace server do
+    namespace :test do
+      multisite_config_hash[:stages].each do |stage|
+        next if stage == :test
+        namespace stage do
+          desc "Prepares all #{server} databases with #{stage} schema."
+          task :prepare do
+            multisite_config_hash[:apps].keys.each do |app|
+              puts "PREPARE #{server} #{stage} #{app}"
+            end
+          end
+        end
+      end
+    end
+  end
+end
