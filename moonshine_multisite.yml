@@ -178,14 +178,25 @@
           :server_name: mpdtool.staging.powertochange.org
           :skip_deploy: true # there's no staging site for the mpdtool yet
       :intranet:
+        :prod:
+          :db_name: ciministry
+          :skip_deploy: true
+          :sensitive: true
+        :dev:
+          :db_name: dev_campusforchrist
+          :skip_deploy: true
+        :staging:
+          :db_name: dev_campusforchrist
+          :skip_deploy: true
+      :common:
         :prod: 
-          :db_name: c4c_intranet_prod
+          :db_name: emu
           :skip_deploy: true
         :dev: 
-          :db_name: c4c_intranet_dev
+          :db_name: emu_common
           :skip_deploy: true
         :staging: 
-          :db_name: c4c_intranet_staging
+          :db_name: emu_stage
           :skip_deploy: true
     :local:
       :moonshine:
@@ -227,6 +238,22 @@
             :skip_deploy: true
           :staging: 
             :db_name: c4c_intranet_staging
+            :skip_deploy: true
+          :test: 
+            :db_name: c4c_intranet_test
+            :skip_deploy: true
+        :common:
+          :prod: 
+            :db_name: c4c_pulse_prod
+            :skip_deploy: true
+          :dev: 
+            :db_name: c4c_pulse_dev
+            :skip_deploy: true
+          :staging: 
+            :db_name: c4c_pulse_staging
+            :skip_deploy: true
+          :test: 
+            :db_name: c4c_pulse_test
             :skip_deploy: true
   :mh:
     :moonshine:
