@@ -177,6 +177,16 @@
           :db_name: mpdtool_dev
           :server_name: mpdtool.staging.powertochange.org
           :skip_deploy: true # there's no staging site for the mpdtool yet
+      :intranet:
+        :prod: 
+          :db_name: c4c_intranet_prod
+          :skip_deploy: true
+        :dev: 
+          :db_name: c4c_intranet_dev
+          :skip_deploy: true
+        :staging: 
+          :db_name: c4c_intranet_staging
+          :skip_deploy: true
     :local:
       :moonshine:
         :domain: local
@@ -207,6 +217,16 @@
             :deploy_to: /var/www/mpdtool.local
           :staging:
             :db_name: p2c_mpdtool_staging
+            :skip_deploy: true
+        :intranet:
+          :prod: 
+            :db_name: c4c_intranet_prod
+            :skip_deploy: true
+          :dev: 
+            :db_name: c4c_intranet_dev
+            :skip_deploy: true
+          :staging: 
+            :db_name: c4c_intranet_staging
             :skip_deploy: true
   :mh:
     :moonshine:
