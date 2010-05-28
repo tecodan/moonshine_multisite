@@ -104,16 +104,20 @@ multisite_config_hash[:servers].keys.each do |server|
             require 'uri'
             require 'net/http'
             multisite_config_hash[:apps].each_pair.each do |app, git|
-              puts "PREPARE #{server} #{stage} #{app}"
-              puts git
+              puts "Prepare server '#{server}' stage '#{stage}' app '#{app}'"
               git =~ /github.com\/(.*)\/(.*)\.git/
               if $1 && $2
-                server = Cdm::SERVER == "utopian" ? "" : "#{Cdm::SERVER}."
-                branch = "#{server}#{stage}"
+                puts "  Found git repo #{git}"
+                server_branch = Cdm::SERVER == "utopian" ? "" : "#{Cdm::SERVER}."
+                branch = "#{server_branch}#{stage}"
                 url = "http://github.com/#{$1}/#{$2}/raw/#{branch}/db/development_structure.sql"
-                puts url
                 r = Net::HTTP.get_response(URI.parse(url))
-                next if r.class == Net::HTTPNotFound
+                if r.class == Net::HTTPNotFound
+                  puts "  Abort.  Missing #{url}"
+                  next
+                else
+                  puts "  Downloading #{url}"
+                end
 
                 # at this point r.body has the SQL to execute - need to load it to the right db
                 test_config = ActiveRecord::Base.configurations["#{app}_test"]
@@ -124,6 +128,8 @@ multisite_config_hash[:servers].keys.each do |server|
 
                 prepare_for_sql('', true)
                 load_dump(tmp_file.path, test_config["database"])
+              else
+                puts "  No git repo found."
               end
             end
           end
