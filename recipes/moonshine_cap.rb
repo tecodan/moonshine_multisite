@@ -1,3 +1,11 @@
+if (config = Dir["#{File.dirname(__FILE__)}/../../../../config/common*.rb"].first) && load(config) && defined?(Cdm) && defined?(Cdm::DISABLE_MOONSHINE) && Cdm::DISABLE_MOONSHINE
+  puts "Moonshine disabled."
+  require 'yaml'
+  require "#{File.dirname(__FILE__)}/../lib/multisite_helper.rb"
+  set_stages
+  return
+end
+
 # these are required at load time by capistrano, we'll set them later
 set :application, ''
 set :repository, ''
