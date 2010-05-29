@@ -108,7 +108,7 @@ multisite_config_hash[:servers].keys.each do |server|
               git =~ /github.com\/(.*)\/(.*)\.git/
               if $1 && $2
                 puts "  Found git repo #{git}"
-                server_branch = Cdm::SERVER == "utopian" ? "" : "#{Cdm::SERVER}."
+                server_branch = Common::SERVER == "utopian" ? "" : "#{Common::SERVER}."
                 branch = "#{server_branch}#{stage}"
                 url = "http://github.com/#{$1}/#{$2}/raw/#{branch}/db/development_structure.sql"
                 r = Net::HTTP.get_response(URI.parse(url))
