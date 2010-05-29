@@ -1,4 +1,4 @@
-if (config = Dir["#{File.dirname(__FILE__)}/../../../../config/common*.rb"].first) && load(config) && defined?(Cdm) && defined?(Cdm::DISABLE_MOONSHINE) && Cdm::DISABLE_MOONSHINE
+if (config = Dir["#{File.dirname(__FILE__)}/../../../../config/common*.rb"].first) && load(config) && defined?(Common) && defined?(Common::DISABLE_MOONSHINE) && Common::DISABLE_MOONSHINE
   puts "Moonshine disabled."
   require 'yaml'
   require "#{File.dirname(__FILE__)}/../lib/multisite_helper.rb"
