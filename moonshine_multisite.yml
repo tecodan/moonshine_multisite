@@ -455,6 +455,6 @@
 :apps:
   :pat: git://github.com/andrewroth/project_application_tool.git
   :pulse: git://github.com/twinge/ministry-tracker.git
-  :intranet: 
+  :intranet: git://github.com/andrewroth/c4c_intranet.git
   :common: git://github.com/andrewroth/mh_common_app.git
   :mpdtool: git://github.com/twinge/mpd_tool.git
