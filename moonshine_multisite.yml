@@ -218,6 +218,9 @@
           :prod:
             :db_name: p2c_pat_prod
             :skip_deploy: true
+          :test:
+            :db_name: p2c_pat_test
+            :skip_deploy: true
         :mpdtool:
           :prod:
             :db_name: p2c_mpdtool_prod
