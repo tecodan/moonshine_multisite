@@ -103,33 +103,13 @@ multisite_config_hash[:servers].keys.each do |server|
           task :prepare => :environment do
             require 'uri'
             require 'net/http'
-            multisite_config_hash[:apps].each_pair.each do |app, git|
+            server = Common::SERVER
+            multisite_config_hash[:apps].keys.each do |app|
               puts "Prepare server '#{server}' stage '#{stage}' app '#{app}'"
-              git =~ /github.com\/(.*)\/(.*)\.git/
-              if $1 && $2
-                puts "  Found git repo #{git}"
-                server_branch = Common::SERVER == "utopian" ? "" : "#{Common::SERVER}."
-                branch = "#{server_branch}#{stage}"
-                url = "http://github.com/#{$1}/#{$2}/raw/#{branch}/db/development_structure.sql"
-                r = Net::HTTP.get_response(URI.parse(url))
-                if r.class == Net::HTTPNotFound
-                  puts "  Abort.  Missing #{url}"
-                  next
-                else
-                  puts "  Downloading #{url}"
-                end
-
-                # at this point r.body has the SQL to execute - need to load it to the right db
-                test_config = ActiveRecord::Base.configurations["#{app}_test"]
-                
-                tmp_file = File.new("tmp/structure.sql", "w+")
-                tmp_file.write(r.body)
-                tmp_file.close
-
-                prepare_for_sql('', true)
-                load_dump(tmp_file.path, test_config["database"])
-              else
-                puts "  No git repo found."
+              success = load_structure_from_git(server, stage, app)
+              if !success && bridge = server_bridge(server)
+                puts "   #{server} bridges to #{bridge}.  Trying bridge... "
+                load_structure_from_git(bridge, stage, app)
               end
             end
           end
@@ -137,4 +117,37 @@ multisite_config_hash[:servers].keys.each do |server|
       end
     end
   end
+end
+
+def load_structure_from_git(server, stage, app)
+  git = multisite_config_hash[:apps][app.to_sym]
+  git =~ /github.com\/(.*)\/(.*)\.git/
+  if $1 && $2
+    puts "  Found git repo #{git}"
+    #server_branch = Common::SERVER == "utopian" ? "" : "#{Common::SERVER}."
+    server_branch = server == "utopian" ? "" : "#{server}."
+    branch = "#{server_branch}#{stage}"
+    url = "http://github.com/#{$1}/#{$2}/raw/#{branch}/db/development_structure.sql"
+    r = Net::HTTP.get_response(URI.parse(url))
+    if r.class == Net::HTTPNotFound
+      puts "  Abort.  Missing #{url}"
+      return false
+    else
+      puts "  Downloading #{url}"
+    end
+
+    # at this point r.body has the SQL to execute - need to load it to the right db
+    test_config = ActiveRecord::Base.configurations["#{app}_test"]
+
+    tmp_file = File.new("tmp/structure.sql", "w+")
+    tmp_file.write(r.body)
+    tmp_file.close
+
+    prepare_for_sql('', true)
+    load_dump(tmp_file.path, test_config["database"])
+    return true
+  else
+    puts "  No git repo found."
+  end
+  return false
 end

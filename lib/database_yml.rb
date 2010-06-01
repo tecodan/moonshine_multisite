@@ -38,15 +38,15 @@ test:
 
   def self.yml_section(server, app, stage)
 %|#{app}_development:
-  database: #{local_db_name(server, app, stage)}
+  database: #{local_db_name(server, app, stage, true)}
   <<: *defaults
 
 #{app}_production:
-  database: #{local_db_name(server, app, stage)}
+  database: #{local_db_name(server, app, stage, true)}
   <<: *defaults
 
 #{app}_test:
-  database: #{local_db_name(server, app, "test")}
+  database: #{local_db_name(server, app, "test", true)}
   <<: *defaults
 
 |
