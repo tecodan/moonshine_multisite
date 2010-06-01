@@ -45,6 +45,7 @@
       :ruby: ree187 
       :common: /var/www/common.campusforchrist.org/current
       :skip_deploy: false
+      :bridge_to: p2c
     :stage_moonshines:
       :pulse:
         :prod: 
@@ -95,7 +96,10 @@
             :db_name: c4c_pulse_dev
             :server_name: pulse.local
           :staging: 
-            :db_name: emu
+            :db_name: c4c_pulse_staging
+            :skip_deploy: true
+          :test: 
+            :db_name: c4c_pulse_test
             :skip_deploy: true
         :intranet: # for db only
           :prod:
@@ -107,21 +111,26 @@
           :staging:
             :db_name: c4c_intranet_staging
             :skip_deploy: true
-        :common:
-          :prod:
-            :db_name: c4c_common_prod
-            :skip_deploy: true
-          :dev:
-            :db_name: c4c_common_dev
-            :delayed_job: false
-            :server_name: common.local
-            :deploy_to: /var/www/common.local
-          :staging:
-            :db_name: utopian_cdm_staging
-            :skip_deploy: true
           :test:
-            :db_name: utopian_cdm_test
+            :db_name: c4c_intranet_test
             :skip_deploy: true
+#
+#        :common:
+#          :prod:
+#            :db_name: c4c_common_prod
+#            :skip_deploy: true
+#          :dev:
+#            :db_name: c4c_common_dev
+#            :delayed_job: false
+#            :server_name: common.local
+#            :deploy_to: /var/www/common.local
+#          :staging:
+#            :db_name: c4c_cdm_staging
+#            :skip_deploy: true
+#          :test:
+#            :db_name: utopian_cdm_test
+#            :skip_deploy: true
+#
   :p2c:
     :moonshine:
       :user: deploy
@@ -152,6 +161,7 @@
         "app/manifests/assets/private/certs/powertochange.org.cert": "/etc/apache2/certs/powertochange.org.cert"
         "app/manifests/assets/private/certs/powertochange.org.key": "/etc/apache2/certs/powertochange.org.key"
       :skip_deploy: false
+      :bridge_to: c4c
     :stage_moonshines:
       :pat:
         :prod: 
@@ -231,32 +241,6 @@
             :deploy_to: /var/www/mpdtool.local
           :staging:
             :db_name: p2c_mpdtool_staging
-            :skip_deploy: true
-        :intranet:
-          :prod: 
-            :db_name: c4c_intranet_prod
-            :skip_deploy: true
-          :dev: 
-            :db_name: c4c_intranet_dev
-            :skip_deploy: true
-          :staging: 
-            :db_name: c4c_intranet_staging
-            :skip_deploy: true
-          :test: 
-            :db_name: c4c_intranet_test
-            :skip_deploy: true
-        :common:
-          :prod: 
-            :db_name: c4c_pulse_prod
-            :skip_deploy: true
-          :dev: 
-            :db_name: c4c_pulse_dev
-            :skip_deploy: true
-          :staging: 
-            :db_name: c4c_pulse_staging
-            :skip_deploy: true
-          :test: 
-            :db_name: c4c_pulse_test
             :skip_deploy: true
   :mh:
     :moonshine:
