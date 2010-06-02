@@ -128,7 +128,7 @@
 #            :db_name: c4c_cdm_staging
 #            :skip_deploy: true
           :test:
-            :db_name: utopian_cdm_test
+            :db_name: c4c_common_test
             :skip_deploy: true
 #
   :p2c:
