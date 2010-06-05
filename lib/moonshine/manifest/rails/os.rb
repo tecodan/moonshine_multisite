@@ -14,6 +14,7 @@ module Moonshine::Manifest::Rails::Os
   def cron_packages
     service "cron", :require => package("cron"), :ensure => :running
     package "cron", :ensure => :installed
+    gem "git"
   end
 
   # Create a MOTD to remind those logging in via SSH that things are managed
