@@ -178,7 +178,6 @@ end
 
 def undefine
   # fix rake collisions with capistrano
-  throw self.inspect
   undef :symlink
   undef :ruby
   undef :install
