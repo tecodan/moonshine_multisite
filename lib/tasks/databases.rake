@@ -138,14 +138,17 @@ def load_structure_from_git(server, stage, app)
 
     # at this point r.body has the SQL to execute - need to load it to the right db
     test_config = ActiveRecord::Base.configurations["#{app}_test"]
+    unless test_config["database"]
+      puts "  Abort.  Missing database for config '#{app}_test'"
+    else
+      tmp_file = File.new("tmp/structure.sql", "w+")
+      tmp_file.write(r.body)
+      tmp_file.close
 
-    tmp_file = File.new("tmp/structure.sql", "w+")
-    tmp_file.write(r.body)
-    tmp_file.close
-
-    prepare_for_sql('', true)
-    load_dump(tmp_file.path, test_config["database"])
-    return true
+      prepare_for_sql('', true)
+      load_dump(tmp_file.path, test_config["database"])
+      return true
+    end
   else
     puts "  No git repo found."
   end

@@ -30,6 +30,18 @@ To download all the database info, run:
       cap c4c pull:dbs:utopian sensitive=true user=deploy
       cap p2c pull:dbs:utopian sensitive=true user=deploy
 
+Before committing anything, first run
+
+      rake git:write
+
+To change to write-enabled git urls.
+
+When you switch to the dev branch, do a
+
+      rake db:setup
+
+To load the schema and run seeds.
+
 |
       end
       task :mh do
