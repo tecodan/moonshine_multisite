@@ -59,6 +59,8 @@ else
   Dir.chdir utility_dir
   system "git checkout -b #{utility_branch} origin/#{utility_branch}"
 end
+system "git submodule init"
+system "git submodule update"
 
 # special case for colinux -- put /var/www on the windows drive
 if system("uname -r | grep co") && system("df | grep /mnt/win")
