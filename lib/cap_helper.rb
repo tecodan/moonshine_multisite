@@ -15,7 +15,7 @@ end
 
 # helper task to run rake commands remotely
 def run_remote_utility_rake(rake_cmd)
-  run_remote_rake rake_cmd, fetch(:utility)
+  run_remote_rake rake_cmd, fetch(:common)
 end
 
 # helper task to run rake commands remotely
