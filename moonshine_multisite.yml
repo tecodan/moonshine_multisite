@@ -75,7 +75,6 @@
       :common:
         :dev:
           :delayed_job: false
-          :db_name: c4c_common
           :server_name: common.campusforchrist.org
           :skip_pull: true
     :local:
