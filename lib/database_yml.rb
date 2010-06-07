@@ -6,6 +6,7 @@ class DatabaseYml
   def self.database_yml
     unless defined?(Common) && defined?(Common::SERVER) && 
       defined?(Common::APP) && defined?(Common::STAGE)
+      puts "Trace:\n\n#{caller.join("\n")}\n\n"
       raise "Error: Common::(SERVER|APP|STAGE) are not defined"
     end
 
