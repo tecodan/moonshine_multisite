@@ -25,7 +25,7 @@ production:
   <<: *defaults
 
 test:
-  database: #{utopian_db_name(Common::SERVER, Common::APP, "test")}
+  database: #{local_db_name(Common::SERVER, Common::APP, "test")}
   <<: *defaults
 
 #{multisite_config_hash[:apps].keys.collect { |app| yml_section(Common::SERVER, app, Common::STAGE) }}
