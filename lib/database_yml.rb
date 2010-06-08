@@ -1,16 +1,12 @@
 require "#{File.dirname(__FILE__)}/multisite_helper.rb"
 
 class DatabaseYml
+  RAILS_ROOT = "#{File.dirname(__FILE__)}/../../../../" unless defined?(RAILS_ROOT)
   def self.database_yml
-    common_config = Dir["#{RAILS_ROOT}/config/common_*"]
-    if common_config.length == 0
-      raise "Error: no config/common_* file found."
-    elsif common_config.length > 1
-      raise "Error: more than one config/common_* file found.  Should be exactly one."
+    unless defined?(Common) && defined?(Common::SERVER) && 
+      defined?(Common::APP) && defined?(Common::STAGE)
+      raise "Error: Common::(SERVER|APP|STAGE) are not defined"
     end
-
-    config = Dir["#{RAILS_ROOT}/config/common_*"].first
-    load config
 
     multisite_config_hash(false)
     yml = %|
@@ -21,18 +17,18 @@ File.read(file).chomp
 }
 
 development:
-  database: #{local_db_name(Cdm::SERVER, Cdm::APP, Cdm::STAGE)}
+  database: #{local_db_name(Common::SERVER, Common::APP, Common::STAGE)}
   <<: *defaults
 
 production:
-  database: #{local_db_name(Cdm::SERVER, Cdm::APP, Cdm::STAGE)}
+  database: #{local_db_name(Common::SERVER, Common::APP, Common::STAGE)}
   <<: *defaults
 
 test:
-  database: #{utopian_db_name(Cdm::SERVER, Cdm::APP, "test")}
+  database: #{local_db_name(Common::SERVER, Common::APP, "test")}
   <<: *defaults
 
-#{multisite_config_hash[:apps].keys.collect { |app| yml_section(Cdm::SERVER, app, Cdm::STAGE) }}
+#{multisite_config_hash[:apps].keys.collect { |app| yml_section(Common::SERVER, app, Common::STAGE) }}
 |
 
     puts yml if ENV["pdb"] == "t"
