@@ -113,8 +113,7 @@
           :test:
             :db_name: c4c_intranet_test
             :skip_deploy: true
-#
-#        :common:
+        :common:
 #          :prod:
 #            :db_name: c4c_common_prod
 #            :skip_deploy: true
@@ -126,10 +125,9 @@
 #          :staging:
 #            :db_name: c4c_cdm_staging
 #            :skip_deploy: true
-#          :test:
-#            :db_name: c4c_common_test
-#            :skip_deploy: true
-#
+          :test:
+            :db_name: c4c_pulse_test
+            :skip_deploy: true
   :p2c:
     :moonshine:
       :user: deploy
