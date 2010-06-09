@@ -2,6 +2,7 @@ require "#{File.dirname(__FILE__)}/multisite_helper.rb"
 
 class DatabaseYml
   RAILS_ROOT = "#{File.dirname(__FILE__)}/../../../../" unless defined?(RAILS_ROOT)
+
   def self.database_yml
     unless defined?(Common) && defined?(Common::SERVER) && 
       defined?(Common::APP) && defined?(Common::STAGE)
