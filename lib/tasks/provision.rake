@@ -132,10 +132,9 @@ end
 
 def undefine
   # fix rake collisions with capistrano
-  throw self.inspect
-  undef :symlink
-  undef :ruby
-  undef :install
+  undef :symlink if defined?(symlink)
+  undef :ruby if defined?(ruby)
+  undef :install if defined?(install)
 end
 
 def run_shell(cmd)
