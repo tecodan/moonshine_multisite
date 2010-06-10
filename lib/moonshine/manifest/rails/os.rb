@@ -17,7 +17,7 @@ module Moonshine::Manifest::Rails::Os
   end
 
   # We always want git gem.
-  def git
+  def git_gem
     gem "git"
   end
 

@@ -34,4 +34,4 @@ roo:
 - libxml2
 - libxml2-dev
 git:
-- git
+- git-core
