@@ -10,6 +10,9 @@ class DatabaseYml
 development:
   adapter: mysql
   database: rails_app
+production:
+  adapter: mysql
+  database: rails_app
 |
     end
 
