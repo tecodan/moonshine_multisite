@@ -6,7 +6,14 @@ class DatabaseYml
   def self.database_yml
     unless defined?(Common) && defined?(Common::SERVER) && 
       defined?(Common::APP) && defined?(Common::STAGE)
-      raise "Error: Common::(SERVER|APP|STAGE) are not defined"
+      return %|
+development:
+  adapter: mysql
+  database: rails_app
+production:
+  adapter: mysql
+  database: rails_app
+|
     end
 
     multisite_config_hash(false)
