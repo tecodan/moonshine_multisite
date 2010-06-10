@@ -239,6 +239,17 @@
           :staging:
             :db_name: p2c_mpdtool_staging
             :skip_deploy: true
+        :intranet:
+          :prod:
+            :db_name: c4c_intranet_prod
+            :skip_deploy: true
+            :sensitive: true
+          :dev:
+            :db_name: c4c_intranet_dev
+            :skip_deploy: true
+          :staging:
+            :db_name: c4c_intranet_staging
+            :skip_deploy: true
   :mh:
     :moonshine:
       :user: deploy
