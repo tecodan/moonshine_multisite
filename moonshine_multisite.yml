@@ -113,23 +113,21 @@
           :test:
             :db_name: c4c_intranet_test
             :skip_deploy: true
-#
-#        :common:
-#          :prod:
-#            :db_name: c4c_common_prod
-#            :skip_deploy: true
-#          :dev:
-#            :db_name: c4c_common_dev
-#            :delayed_job: false
-#            :server_name: common.local
-#            :deploy_to: /var/www/common.local
-#          :staging:
-#            :db_name: c4c_cdm_staging
-#            :skip_deploy: true
-#          :test:
-#            :db_name: c4c_common_test
-#            :skip_deploy: true
-#
+        :common:
+          :prod:
+            :db_name: c4c_pulse_prod
+            :skip_deploy: true
+          :dev:
+            :db_name: c4c_pulse_dev
+            :delayed_job: false
+            :server_name: common.local
+            :deploy_to: /var/www/common.local
+          :staging:
+            :db_name: c4c_pulse_staging
+            :skip_deploy: true
+          :test:
+            :db_name: c4c_pulse_test
+            :skip_deploy: true
   :p2c:
     :moonshine:
       :user: deploy
