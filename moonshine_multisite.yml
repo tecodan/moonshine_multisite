@@ -413,7 +413,7 @@
             :skip_deploy: true
           :dev: 
             :db_name: utopian_intranet_dev
-            :delayed_job: true
+            :skip_deploy: true
           :staging:
             :db_name: utopian_intranet_staging
             :skip_deploy: true
