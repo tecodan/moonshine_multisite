@@ -14,6 +14,10 @@ module Moonshine::Manifest::Rails::Os
   def cron_packages
     service "cron", :require => package("cron"), :ensure => :running
     package "cron", :ensure => :installed
+  end
+
+  # We always want git gem.
+  def git
     gem "git"
   end
 
