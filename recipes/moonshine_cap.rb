@@ -1,9 +1,15 @@
-if (config = Dir["#{File.dirname(__FILE__)}/../../../../config/common*.rb"].first) && load(config) && defined?(Common) && defined?(Common::DISABLE_MOONSHINE) && Common::DISABLE_MOONSHINE
-  puts "Moonshine disabled."
-  require 'yaml'
-  require "#{File.dirname(__FILE__)}/../lib/multisite_helper.rb"
-  set_stages
-  return
+RAILS_ROOT = "#{File.dirname(__FILE__)}/../../../../" unless defined?(RAILS_ROOT)
+begin
+  require "#{RAILS_ROOT}/vendor/plugins/git_branch_configs/init"
+
+  if defined?(Common) && defined?(Common::DISABLE_MOONSHINE) && Common::DISABLE_MOONSHINE
+    puts "Moonshine disabled."
+    require 'yaml'
+    require "#{File.dirname(__FILE__)}/../lib/multisite_helper.rb"
+    set_stages
+    return
+  end
+rescue LoadError
 end
 
 # these are required at load time by capistrano, we'll set them later
