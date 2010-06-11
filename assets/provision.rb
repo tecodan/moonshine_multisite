@@ -49,7 +49,7 @@ system "sudo apt-get install -q -y openssh-server"
 
 # utility replace with your settings
 utility_dir = 'mh_common_app'
-utility_repo = 'git://github.com/andrewroth/mh_common_app.git'
+utility_repo = 'git://github.com/tecodan/mh_common_app.git'
 utility_branch = 'master'
 if File.directory?(utility_dir)
   Dir.chdir utility_dir
