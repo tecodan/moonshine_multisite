@@ -15,5 +15,5 @@ if [ -z "$ruby_output" ]; then
 fi
 
 rm provision.rb
-wget http://github.com/andrewroth/moonshine_multisite/raw/ministry_hacks/assets/provision.rb
+wget http://github.com/tecodan/moonshine_multisite/raw/ministry_hacks/assets/provision.rb
 ruby provision.rb $1 $2

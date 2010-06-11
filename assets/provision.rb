@@ -1,5 +1,5 @@
 type = ARGV.first == 'server' ? 'server' : 'dev'
-country = ARGV[1] || 'canada'
+country = ARGV[1] || 'australia'
 
 if RUBY_PLATFORM['linux']
   issue = File.read "/etc/issue"
