@@ -61,7 +61,7 @@ Provisioning your local computer is complete.
         STDOUT.print "Enter the password for #{%x[whoami].chomp}@localhost: "
         @password = STDIN.gets.chomp
         ENV['HOSTS'] = '127.0.0.1'
-        provision(:aus, multisite_config_hash[:servers][:aus], true)
+        provision(:aut, multisite_config_hash[:servers][:aut], true)
         puts %|
 Provisioning your local computer is complete.
 
