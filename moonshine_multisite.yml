@@ -407,16 +407,16 @@
       #  "app/manifests/assets/private/certs/powertochange.org.key": "/etc/apache2/certs/powertochange.org.key"
       :skip_deploy: false
     :stage_moonshines:
-#      :pat:
+      :pat:
 #        :prod: 
 #          :db_name: mh_pat_prod
 #          :server_name: pat.ministryhacks.com
 #          :sensitive: true
 #          :delayed_job: false
-#        :dev: 
-#          :db_name: mh_pat_dev
-#          :server_name: pat.dev.ministryhacks.com
-#          :delayed_job: false
+         :dev: 
+          :db_name: aus_pat_dev
+          :server_name: localhost
+          :delayed_job: false
 #        :staging: 
 #          :db_name: mh_pat_staging
 #          :server_name: pat.staging.ministryhacks.com
@@ -464,14 +464,14 @@
         :user: <%= %x[whoami].chomp %>
         :group: <%= %x[whoami].chomp %>
       :stage_moonshines:
-#        :pat:
+        :pat:
 #          :prod:
 #            :db_name: mh_pat_prod
 #            :skip_deploy: true
-#          :dev: 
-#            :db_name: mh_pat_dev
-#            :deploy_to: /var/www/pat.local
-#            :delayed_job: false
+          :dev: 
+            :db_name: mh_pat_dev
+            :deploy_to: /var/www/pat.local
+            :delayed_job: false
 #          :staging:
 #            :db_name: mh_pat_staging
 #            :skip_deploy: true
@@ -571,7 +571,7 @@
             :db_name: utopian_mpdtool_test
             :skip_deploy: true
 :apps:
-  :pat: git://github.com/andrewroth/project_application_tool.git
+  :pat: git://github.com/tecodan/project_application_tool.git   # aut exists here for now
   :pulse: git://github.com/tecodan/ministry-tracker.git     # utopian found here for now
   :intranet: git://github.com/andrewroth/c4c_intranet.git
   :common: git://github.com/tecodan/mh_common_app.git   # there might be aus changes
